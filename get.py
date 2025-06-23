@@ -1,4 +1,11 @@
-import redis 
+import redis, sys 
+
+# Ensure two dates are passed
+if len(sys.argv) != 2:
+    print("Usage: python main.py cache_key")
+    sys.exit(1)
+
+cache_key = sys.argv[1]
 
 # connect to redis
 try:
@@ -8,6 +15,5 @@ try:
 except Exception as e:
     print(f'Failed to connect to Redis: {e}')
     
-cache_key = '14054859_14000398_6002025'
 data = r.hgetall(cache_key)
 print(data['billing_doc_no'])
