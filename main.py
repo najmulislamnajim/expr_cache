@@ -1,8 +1,16 @@
-import redis
+import sys, redis, pymysql, decimal
 import pymysql
 import decimal 
 from datetime import date
 
+# Ensure two dates are passed
+if len(sys.argv) != 3:
+    print("Usage: python main.py <start_date> <end_date>")
+    sys.exit(1)
+
+# Get the start and end dates from the command line arguments
+start_date = sys.argv[1]
+end_date = sys.argv[2]
 
 # connect to redis
 try:
@@ -28,7 +36,7 @@ except Exception as e:
 # query to get all the data from the table
 query = f"""SELECT billing_doc_no, partner, matnr, batch, territory_code, quantity, MAX(billing_date) AS latest_date
 FROM rpl_sales_info_sap
-WHERE billing_date BETWEEN '2025-06-23' AND '2025-06-23'
+WHERE billing_date BETWEEN '{start_date}' AND '{end_date}' 
 GROUP BY partner, matnr, batch;"""
 
 # execute the query
